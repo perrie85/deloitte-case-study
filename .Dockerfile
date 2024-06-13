@@ -4,10 +4,8 @@ FROM php:8.2-alpine
 # Set working directory
 WORKDIR /var/www/html
 
-# Install autoconf, install mongodb extension, delete autoconf
+# Install autoconf, delete autoconf
 RUN apk --update add --virtual build-dependencies build-base openssl-dev autoconf \
-    && pecl install mongodb \
-    && docker-php-ext-enable mongodb \
     && pecl install -o -f redis \
     && docker-php-ext-enable redis \
     && apk del build-dependencies build-base openssl-dev autoconf
