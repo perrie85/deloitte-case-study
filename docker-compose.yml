@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  php: &php-service
+    build:
+      context: .
+      dockerfile: .Dockerfile
+    container_name: app
+    ports:
+        - 8000:8000
+    volumes:
+      - .:/var/www/html
+    networks:
+      - laravel-network
+    command: 'php artisan serve --host=0.0.0.0 --port=8000'
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - laravel-network
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    volumes:
+      - redis-data:/data
+    ports:
+      - 6379:6379
+    networks:
+      - laravel-network
+
+volumes:
+  mysql-data:
+  redis-data:
+
+networks:
+  laravel-network:
