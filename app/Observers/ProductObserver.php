@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Support\Facades\Cache;
 
 class ProductObserver
 {
@@ -17,6 +18,11 @@ class ProductObserver
             . '-' . rand(10000, 99999));
     }
 
+    public function created(Product $product): void
+    {
+        Cache::forget('products');
+    }
+
     public function updating(Product $product): void
     {
         $category = Category::find($product->category_id);
@@ -25,5 +31,15 @@ class ProductObserver
             . '-'
             . substr(str_replace(' ', '', $product->name), 0, 2)
             . '-' . rand(10000, 99999));
+    }
+
+    public function updated(Product $product): void
+    {
+        Cache::forget('products');
+    }
+
+    public function deleted(Product $product): void
+    {
+        Cache::forget('products');
     }
 }
