@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Product\SearchRequest;
 use App\Http\Requests\Product\StoreRequest;
 use App\Http\Requests\Product\UpdateRequest;
+use App\Http\Resources\ProductResource;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 
@@ -13,43 +15,28 @@ class ProductController extends Controller
     {
     }
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        return $this->successResponse($this->productService->index());
+        return $this->successResponse(ProductResource::collection($this->productService->index()));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreRequest $request)
     {
-        return $this->successResponse($this->productService->store($request->validated()));
+        return $this->successResponse(ProductResource::make($this->productService->store($request->validated())));
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(int $id)
     {
-        return $this->successResponse($this->productService->show($id));
+        return $this->successResponse(ProductResource::make($this->productService->show($id)));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateRequest $request, int $id)
     {
-        return $this->successResponse($this->productService->update($id, $request->validated()));
+        return $this->successResponse(ProductResource::make($this->productService->update($id, $request->validated())));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(int $id)
+    public function search(SearchRequest $request)
     {
-        return $this->successResponse($this->productService->destroy($id));
+        return $this->successResponse($this->productService->search($request->validated()));
     }
 }

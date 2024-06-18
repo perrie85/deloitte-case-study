@@ -1,18 +1,26 @@
 version: '3.8'
 
 services:
-  php: &php-service
+  app: &php-service
     build:
       context: .
       dockerfile: .Dockerfile
-    container_name: app
+    command: 'php artisan serve --host=0.0.0.0 --port=8000'
     ports:
         - 8000:8000
     volumes:
       - .:/var/www/html
     networks:
       - laravel-network
-    command: 'php artisan serve --host=0.0.0.0 --port=8000'
+    depends_on:
+      - elasticsearch
+      
+  queue:
+    <<: *php-service
+    command: "php artisan queue:work"
+    ports: []
+    depends_on:
+      - app
 
   mysql:
     image: mysql:latest
@@ -39,9 +47,33 @@ services:
     networks:
       - laravel-network
 
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.6
+    environment:
+      discovery.type: single-node
+      ELASTIC_PASSWORD: ${ELASTICSEARCH_PASSWORD}
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    networks:
+      - laravel-network
+
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.17.6
+    ports:
+      - "5601:5601"
+    networks:
+      - laravel-network
+    depends_on:
+      - elasticsearch
+
 volumes:
   mysql-data:
   redis-data:
+  elasticsearch-data:
 
 networks:
   laravel-network:
