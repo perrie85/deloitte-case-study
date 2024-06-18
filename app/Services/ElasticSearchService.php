@@ -20,7 +20,18 @@ class ElasticSearchService
             ->build();
     }
 
-    public function index()
+    public function index(array $params)
     {
+        $this->client->index($params);
+    }
+
+    public function delete(array $params)
+    {
+        $this->client->delete($params);
+    }
+
+    public function search(array $params)
+    {
+        return $this->client->search($params);
     }
 }

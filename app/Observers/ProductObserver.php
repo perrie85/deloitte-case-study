@@ -2,6 +2,8 @@
 
 namespace App\Observers;
 
+use App\Jobs\IndexProductJob;
+use App\Jobs\RemoveProductJob;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Support\Facades\Cache;
@@ -21,6 +23,8 @@ class ProductObserver
     public function created(Product $product): void
     {
         Cache::forget('products');
+
+        IndexProductJob::dispatch($product);
     }
 
     public function updating(Product $product): void
@@ -36,10 +40,14 @@ class ProductObserver
     public function updated(Product $product): void
     {
         Cache::forget('products');
+
+        IndexProductJob::dispatch($product);
     }
 
     public function deleted(Product $product): void
     {
         Cache::forget('products');
+
+        RemoveProductJob::dispatch($product->id);
     }
 }

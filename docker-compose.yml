@@ -1,12 +1,11 @@
 version: '3.8'
 
 services:
-  php: &php-service
+  app: &php-service
     build:
       context: .
       dockerfile: .Dockerfile
     command: 'php artisan serve --host=0.0.0.0 --port=8000'
-    container_name: app
     ports:
         - 8000:8000
     volumes:
@@ -15,6 +14,13 @@ services:
       - laravel-network
     depends_on:
       - elasticsearch
+      
+  queue:
+    <<: *php-service
+    command: "php artisan queue:work"
+    ports: []
+    depends_on:
+      - app
 
   mysql:
     image: mysql:latest
