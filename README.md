@@ -35,6 +35,12 @@ docker-compose up -d
     - redis: caching
         - host -> http://127.0.0.1
         - port -> 6379
+    - elasticsearch:
+        - host -> http://127.0.0.1
+        - port -> 9200
+    - redis: caching
+        - host -> http://127.0.0.1
+        - port -> 5601
 
 - To connect to your application service, run the command below.
 ```
@@ -49,11 +55,6 @@ php artisan key:generate
 - While you are still connected to your application service via sh, run the command below to run the migrations.
 ```
 php artisan migrate
-```
-
-- While you are still connected to your application service via sh, run the command below to generate default clients.
-```
- php artisan passport:install
 ```
 
 - While you are still connected to your application service via sh, run the command below to generate products.
