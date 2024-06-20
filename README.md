@@ -1,7 +1,5 @@
 # Deloitte Case Study
 
-## [Postman Collection]()
-
 ## Requirements
 - Docker
 - Docker Compose
@@ -40,7 +38,7 @@ docker-compose up -d
     - elasticsearch:
         - host -> http://127.0.0.1
         - port -> 9200
-    - redis: caching
+    - kibana:
         - host -> http://127.0.0.1
         - port -> 5601
 
