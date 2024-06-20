@@ -14,7 +14,7 @@
 
 ```
 docker-compose build
-docker-compose run php composer install
+docker-compose run app composer install
 ```
 
 - To deploy the development server
