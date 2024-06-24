@@ -1,5 +1,7 @@
 # Deloitte Case Study
 
+## [Postman Collection](https://github.com/perrie85/deloitte-case-study/blob/main/Deloitte.postman_collection.json)
+
 ## Requirements
 - Docker
 - Docker Compose
